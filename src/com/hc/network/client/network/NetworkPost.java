@@ -57,13 +57,14 @@ public abstract class NetworkPost implements AcceptImpl {
             multicastSocket.send(packet);
         } catch (IOException ex) {
             ret = false;
+            ex.printStackTrace();
         }
         return ret;
     }
-    public void setUser(String id, User user) {
-        manage.setUser(id, user);
+    public void registerUser(String id, User user) {
+        manage.registerUser(id, user);
     }
-    public void setUser(User user) {
-        manage.setUser(user);
+    public void registerUser(User user) {
+        manage.registerUser(user);
     }
 }

@@ -9,14 +9,17 @@ import java.util.HashMap;
  */
 public class NetworkManage {
     private HashMap<String, User> personMap = new HashMap<>();
-    public User getUser(String id) {
+    public User getUser(String id, User defaultUser) {
+        User ret = personMap.get(id);
+        if (ret == null)
+            personMap.put(id, defaultUser);
         return personMap.get(id);
     }
-    public void setUser(String id, User user) {
+    public void registerUser(String id, User user) {
         personMap.put(id, user);
     }
-    public void setUser(User user) {
-        setUser(user.getId(), user);
+    public void registerUser(User user) {
+        registerUser(user.getId(), user);
     }
     public void removeUser(User user) {
         removeUser(user.getId());

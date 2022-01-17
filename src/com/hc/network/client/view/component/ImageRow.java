@@ -12,10 +12,10 @@ public class ImageRow extends Row {
         this.image = image;
     }
     public ImageRow(String name, ImageIcon image) {
-        this(0, name, image);
+        this(Collector.defaultHeadNum, name, image);
     }
     public ImageRow(ImageIcon image) {
-        this("Robot", image);
+        this(Collector.defaultName, image);
     }
     @Override
     protected void paintComponent(Graphics g){

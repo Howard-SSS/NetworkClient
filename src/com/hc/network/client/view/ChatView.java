@@ -1,6 +1,5 @@
 package com.hc.network.client.view;
 
-import com.hc.network.client.model.MessageAbstract;
 import com.hc.network.client.model.User;
 import com.hc.network.client.model.content.*;
 import com.hc.network.client.network.NetworkManage;
@@ -21,6 +20,8 @@ import java.util.concurrent.Executors;
 
 public class ChatView extends JFrame{
     private NetworkPost networkPost;
+
+    private int count = 0;
 
     private JButton pictureButton;
     private JButton sendButton;
@@ -47,8 +48,6 @@ public class ChatView extends JFrame{
             @Override
             public void msocketAccept() {
                 MulticastSocket socket = getMulticastSocket();
-                if (socket == null)
-                    return;
                 mThread = new Thread(() -> {
                     byte[] bytes = new byte[1024];
                     DatagramPacket packet = new DatagramPacket(bytes, bytes.length);
@@ -56,16 +55,21 @@ public class ChatView extends JFrame{
                         try {
                             socket.receive(packet);
                             Object object = Translate.ByteToObject(bytes);
-                            User user = manage.getUser(object.toString());
+                            User user = manage.getUser(object.toString(), Collector.getCustomUser());
                             Row row = null;
                             if (object instanceof TextModel) {
                                 TextModel model = (TextModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
+                                row.setPreferredSize(
+                                        new Dimension(
+                                                 Collector.chatViewWidth, ((TextRow)row).calculateHeight(model.getText())
+                                        )
+                                );
                             } else if (object instanceof LoginModel) {
                                 LoginModel model = (LoginModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
                                 loginUser(user);
-                                manage.setUser(user);
+                                manage.registerUser(user);
                             } else if (object instanceof QuitModel) {
                                 QuitModel model = (QuitModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
@@ -79,6 +83,7 @@ public class ChatView extends JFrame{
                                 row = new ImageRow(user.getHeadNum(), model.getName(), image);
                             }
                             outPutTextPane.insertComponent(row);
+                            outPutTextPane.setCaretPosition(++count);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -94,7 +99,7 @@ public class ChatView extends JFrame{
         };
         userList.setModel(new DefaultListModel<>());
         networkPost.msocketAccept();
-        loginUser(new User(Collector.id, Collector.name, Collector.headNum));
+        loginUser(new User(Collector.userId, Collector.name, Collector.userHeadNum));
     }
 
     /**
@@ -262,16 +267,20 @@ public class ChatView extends JFrame{
         inputScrollPane.setViewportView(inputTextArea);
     }
     private void initUserList() {
+        final int height = 45;
         userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        userList.setFixedCellHeight(height);
         userList.setCellRenderer(new DefaultListCellRenderer() {
             public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 User user = (User)value;
+                Image image = new ImageIcon("resource/head/Ak" + user.getHeadNum() + ".png").getImage().getScaledInstance(height, height, Image.SCALE_DEFAULT);
                 setText(user.getName());
-                setIcon(new ImageIcon("resource/head/Ak" + user.getHeadNum() + ".png"));
+                setIcon(new ImageIcon(image));
+                setIconTextGap(20);
                 Color background;
                 Color foreground;
                 JList.DropLocation dropLocation = list.getDropLocation();
-                if (dropLocation != null&& !dropLocation.isInsert()&& dropLocation.getIndex() == index) {
+                if (dropLocation != null && !dropLocation.isInsert()&& dropLocation.getIndex() == index) {
                     background = Color.BLUE;
                     foreground = Color.WHITE;
                 }else if (isSelected) {
@@ -300,8 +309,8 @@ public class ChatView extends JFrame{
         outPutTextPane.setEditable(false);
         outPutTextPane.setBorder(null);
         outPutTextPane.setFocusable(false);
-        outPutTextPane.setMaximumSize(new java.awt.Dimension(437, 280));
-        outPutTextPane.setMinimumSize(new java.awt.Dimension(437, 280));
+        outPutTextPane.setMaximumSize(new java.awt.Dimension(Collector.chatViewWidth, 280));
+        outPutTextPane.setMinimumSize(new java.awt.Dimension(Collector.chatViewWidth, 280));
         outPutScrollPane.setViewportView(outPutTextPane);
     }
 }
