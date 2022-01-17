@@ -20,7 +20,7 @@ public abstract class NetworkPost implements AcceptImpl {
     private MulticastSocket multicastSocket;
     public NetworkPost() {
         try {
-            multicastSocket = new MulticastSocket(Collector.getAddress(NetworkType.MSOCKET));
+            multicastSocket = new MulticastSocket(Collector.getAddress(NetworkType.MSOCKET).getPort());
             multicastSocket.joinGroup(Collector.getAddress(NetworkType.MSOCKET).getAddress());
         } catch (IOException ex) {
             ex.printStackTrace();

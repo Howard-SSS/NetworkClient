@@ -25,7 +25,7 @@ public class ChatView extends JFrame{
     private JButton pictureButton;
     private JButton sendButton;
     private JButton uploadButton;
-    private JList<User> userList;
+    private javax.swing.JList<User> userList;
     private JMenuBar menuBar;
     private JMenu editMenu;
     private JMenu fileMenu;
@@ -39,6 +39,7 @@ public class ChatView extends JFrame{
     private JToolBar handleToolbar;
 
     public ChatView() {
+        initComponents();
         networkPost = new NetworkPost() {
             private NetworkManage manage = new NetworkManage();
             private ExecutorService mService = Executors.newSingleThreadExecutor();
@@ -91,7 +92,7 @@ public class ChatView extends JFrame{
 
             }
         };
-        initComponents();
+        userList.setModel(new DefaultListModel<>());
         networkPost.msocketAccept();
         loginUser(new User(Collector.id, Collector.name, Collector.headNum));
     }
