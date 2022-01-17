@@ -20,7 +20,7 @@ public class TextRow extends Row {
     @Override
     protected void paintComponent(Graphics g){
         int maxWidth = getWidth();
-        g.drawImage(new ImageIcon(getClass().getResource("/resource/head/Ak" + headNum + ".png")).getImage(), 5, 0, 45, 45, Color.yellow, this);
+        g.drawImage(new ImageIcon("resource/head/Ak" + headNum + ".png").getImage(), 5, 0, 45, 45, Color.yellow, this);
         g.setFont(Collector.nameFont);
         FontMetrics fm = g.getFontMetrics();
         int nameHeight = fm.getHeight();

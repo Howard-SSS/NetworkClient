@@ -19,7 +19,7 @@ public class ImageRow extends Row {
     }
     @Override
     protected void paintComponent(Graphics g){
-        g.drawImage(new ImageIcon(getClass().getResource("/resource/7724/Ak" + headNum + ".png")).getImage(), 5, 0, 45, 45, Color.yellow, this);
+        g.drawImage(new ImageIcon("resource/7724/Ak" + headNum + ".png").getImage(), 5, 0, 45, 45, Color.yellow, this);
         g.setFont(Collector.nameFont);
         FontMetrics fm = g.getFontMetrics();
         int nameHeight = fm.getHeight();

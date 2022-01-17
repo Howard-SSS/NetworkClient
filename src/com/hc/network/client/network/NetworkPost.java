@@ -1,27 +1,22 @@
 package com.hc.network.client.network;
 
 import com.hc.network.client.model.MessageAbstract;
+import com.hc.network.client.model.User;
 import com.hc.network.client.model.content.LoginModel;
 import com.hc.network.client.model.content.QuitModel;
 import com.hc.network.client.model.content.TextModel;
 import com.hc.network.client.util.Collector;
 import com.hc.network.client.util.Translate;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.MulticastSocket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /*
  * 网络收发器
  */
 public abstract class NetworkPost implements AcceptImpl {
+    protected NetworkManage manage = new NetworkManage();
     private MulticastSocket multicastSocket;
     public NetworkPost() {
         try {
@@ -64,5 +59,11 @@ public abstract class NetworkPost implements AcceptImpl {
             ret = false;
         }
         return ret;
+    }
+    public void setUser(String id, User user) {
+        manage.setUser(id, user);
+    }
+    public void setUser(User user) {
+        manage.setUser(user);
     }
 }

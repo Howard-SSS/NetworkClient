@@ -5,6 +5,7 @@ import com.hc.network.client.model.User;
 import com.hc.network.client.model.content.*;
 import com.hc.network.client.network.NetworkManage;
 import com.hc.network.client.network.NetworkPost;
+import com.hc.network.client.util.Collector;
 import com.hc.network.client.util.Translate;
 import com.hc.network.client.view.component.ImageRow;
 import com.hc.network.client.view.component.Row;
@@ -24,7 +25,7 @@ public class ChatView extends JFrame{
     private JButton pictureButton;
     private JButton sendButton;
     private JButton uploadButton;
-    JList<MessageAbstract> userList;
+    private JList<User> userList;
     private JMenuBar menuBar;
     private JMenu editMenu;
     private JMenu fileMenu;
@@ -40,11 +41,8 @@ public class ChatView extends JFrame{
     public ChatView() {
         networkPost = new NetworkPost() {
             private NetworkManage manage = new NetworkManage();
-
             private ExecutorService mService = Executors.newSingleThreadExecutor();
-
             private Thread mThread = null;
-
             @Override
             public void msocketAccept() {
                 MulticastSocket socket = getMulticastSocket();
@@ -65,9 +63,13 @@ public class ChatView extends JFrame{
                             } else if (object instanceof LoginModel) {
                                 LoginModel model = (LoginModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
+                                loginUser(user);
+                                manage.setUser(user);
                             } else if (object instanceof QuitModel) {
                                 QuitModel model = (QuitModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
+                                quitUser(user);
+                                manage.removeUser(user);
                             } else if (object instanceof ImageModel) {
                                 ImageModel model = (ImageModel) object;
                                 ImageIcon image = (ImageIcon) Translate.ByteToObject(model.getBytes());
@@ -90,6 +92,33 @@ public class ChatView extends JFrame{
             }
         };
         initComponents();
+        networkPost.msocketAccept();
+        loginUser(new User(Collector.id, Collector.name, Collector.headNum));
+    }
+
+    /**
+     * list界面插入user
+     * @param user
+     */
+    private void loginUser(User user) {
+        DefaultListModel model = (DefaultListModel)userList.getModel();
+        model.addElement(user);
+        userList.setModel(model);
+    }
+
+    /**
+     * list界面推出user
+     * @param user
+     */
+    private void quitUser(User user) {
+        DefaultListModel model = (DefaultListModel)userList.getModel();
+        for (int i = 0; i < model.size(); i++) {
+            if (user.toString().equals(model.toString())) {
+                model.remove(i);
+                break;
+            }
+        }
+        userList.setModel(model);
     }
     private void initComponents() {
         chatPanel = new JPanel();
@@ -107,6 +136,13 @@ public class ChatView extends JFrame{
         fileMenu = new JMenu();
         editMenu = new JMenu();
         setMenuItem = new JMenuItem();
+
+        initMenuBar();
+        initInputTextArea();
+        initOutputTextPane();
+        initHandleToolbar();
+        initSendButton();
+        initUserList();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 102, 51));
@@ -172,7 +208,7 @@ public class ChatView extends JFrame{
     private void initMenuBar() {
         fileMenu.setText("文件");
         editMenu.setText("编辑");
-        setMenuItem.setIcon(new ImageIcon(getClass().getResource("/Resource/tool/Gear.png"))); // NOI18N
+        setMenuItem.setIcon(new ImageIcon("resource/tool/Gear.png"));
         setMenuItem.setText("设置");
         setMenuItem.addActionListener(evt -> {
 
@@ -186,7 +222,7 @@ public class ChatView extends JFrame{
         handleToolbar.setBackground(new java.awt.Color(204, 204, 204));
         handleToolbar.setRollover(true);
 
-        pictureButton.setIcon(new ImageIcon(getClass().getResource("/Resource/tool/photo.png")));
+        pictureButton.setIcon(new ImageIcon("resource/tool/photo.png"));
         pictureButton.setFocusable(false);
         pictureButton.setHorizontalTextPosition(SwingConstants.CENTER);
         pictureButton.setOpaque(false);
@@ -194,7 +230,7 @@ public class ChatView extends JFrame{
         pictureButton.addActionListener(evt -> {
             // 新建界面
         });
-        uploadButton.setIcon(new ImageIcon((getClass()).getResource("/resource/tool/upload.png")));
+        uploadButton.setIcon(new ImageIcon("resource/tool/upload.png"));
         uploadButton.setFocusable(false);
         uploadButton.setHorizontalTextPosition(SwingConstants.CENTER);
         uploadButton.setOpaque(false);
@@ -227,9 +263,10 @@ public class ChatView extends JFrame{
     private void initUserList() {
         userList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         userList.setCellRenderer(new DefaultListCellRenderer() {
-            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus){
-                setText(((ResponseModel)value).getName());
-                setIcon(new ImageIcon(getClass().getResource("/resource/head/Ak" + ((ResponseModel)value).getHeadNum() + ".png")));
+            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                User user = (User)value;
+                setText(user.getName());
+                setIcon(new ImageIcon("resource/head/Ak" + user.getHeadNum() + ".png"));
                 Color background;
                 Color foreground;
                 JList.DropLocation dropLocation = list.getDropLocation();
@@ -252,7 +289,7 @@ public class ChatView extends JFrame{
         userList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if(evt.getClickCount() == 2){
-                    MessageAbstract model = userList.getSelectedValue();
+
                 }
             }
         });

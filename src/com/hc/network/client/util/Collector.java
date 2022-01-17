@@ -1,5 +1,6 @@
 package com.hc.network.client.util;
 
+import com.hc.network.client.model.User;
 import com.hc.network.client.network.NetworkType;
 
 import java.awt.*;
@@ -11,8 +12,8 @@ import java.util.UUID;
  * 个人信息收集器
  */
 public class Collector {
+    public static int headNum = 0;
     public static String name = "";
-    public static InetSocketAddress chatAddress;
     // 接受信息的网络
     private static HashMap<NetworkType, InetSocketAddress> map = new HashMap<>();
     public static String id = UUID.randomUUID().toString();
@@ -20,7 +21,7 @@ public class Collector {
         if (map.get(type) == null) {
             switch (type) {
                 case MSOCKET:
-                    map.put(type, new InetSocketAddress("239.1.2.3", 8000));
+                    map.put(type, new InetSocketAddress("239.1.2.4", 8080));
                     break;
             }
         }

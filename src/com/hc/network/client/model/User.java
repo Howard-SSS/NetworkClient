@@ -4,7 +4,20 @@ public class User {
     String id;
     String name;
     int headNum;
-
+    public User(String id) {
+        this.id = id;
+        this.name = "Robot";
+        this.headNum = 1;
+    }
+    public User(String id, String name) {
+        this(id);
+        this.name = name;
+        this.headNum = 1;
+    }
+    public User(String id, String name, int headNum) {
+        this(id, name);
+        this.headNum = headNum;
+    }
     public String getId() {
         return id;
     }
@@ -32,12 +45,12 @@ public class User {
         return this;
     }
 
+    /**
+     * 以重写
+     * @return id
+     */
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", headNum=" + headNum +
-                '}';
+        return id;
     }
 }

@@ -21,6 +21,10 @@ public abstract class MessageAbstract {
         return name;
     }
 
+    /**
+     * 以重写
+     * @return id
+     */
     @Override
     public String toString() {
         return id;

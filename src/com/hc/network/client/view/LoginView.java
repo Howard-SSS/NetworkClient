@@ -1,5 +1,7 @@
 package com.hc.network.client.view;
 
+import com.hc.network.client.util.Collector;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -31,7 +33,7 @@ public class LoginView extends JFrame {
             @Override
             public Component getListCellRendererComponent(JList list,Object value,int index,boolean isSelected,boolean cellHasFocus){
                 setText("");
-                setIcon(new ImageIcon("E://NetworkClient/src/com/hc/network/resource/head/Ak" + Integer.parseInt((String)value) + ".png"));
+                setIcon(new ImageIcon("resource/head/Ak" + Integer.parseInt((String)value) + ".png"));
                 Color background;
                 Color foreground;
                 JList.DropLocation dropLocation = list.getDropLocation();
@@ -60,6 +62,7 @@ public class LoginView extends JFrame {
         loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 dispose();
+                Collector.name = nameTextField.getText();
                 ChatView view = new ChatView();
                 view.setVisible(true);
                 view.setTitle("聊天界面");
