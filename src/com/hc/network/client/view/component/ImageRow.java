@@ -20,7 +20,7 @@ public class ImageRow extends Row {
     }
     @Override
     protected void paintComponent(Graphics g){
-        g.drawImage(new ImageIcon("resource/7724/Ak" + headNum + ".png").getImage(), 5, 0, 45, 45, Color.yellow, this);
+        g.drawImage(new ImageIcon("resource/head/Ak" + headNum + ".png").getImage(), 5, 0, 45, 45, Color.yellow, this);
         g.setFont(Collector.nameFont);
         int nameHeight = g.getFontMetrics().getHeight();
         g.setColor(Collector.nameColor);
@@ -35,28 +35,14 @@ public class ImageRow extends Row {
      * @return {width, height}
      */
     private int[] scaleSize() {
-        int width = image.getIconWidth(), height = image.getIconHeight();
-        final int maxHeight = 130, maxWidth = Collector.chatViewWidth - 5 - 45 - 5;
-        int retw = maxWidth, reth = maxHeight;
-        if (height <= maxHeight && width < maxWidth)
-            return new int[]{width, height};
-        else if (height <= maxHeight) {
-            double bi = maxWidth / width;
-            retw = (int)(width * bi);
-            reth = (int)(height * bi);
-            return new int[]{retw, reth};
-        } else if (width <= maxWidth) {
-            double bi = maxHeight / height;
-            retw = (int)(width * bi);
-            reth = (int)(height * bi);
-        }
-        return new int[]{retw, reth};
+        return new int[]{image.getIconWidth(), image.getIconHeight()};
     }
     @Override
     public int componentHeight() {
         FontMetrics fm = FontDesignMetrics.getMetrics(Collector.nameFont);
         int nameHeight = fm.getHeight();
-        return scaleSize()[1] + 3 + nameHeight + 5;
+        int contentHeight = scaleSize()[1] + 3 + nameHeight + 5, headHeight = 45;
+        return contentHeight > headHeight ? contentHeight : headHeight;
     }
     @Override
     public int componentWidth() {

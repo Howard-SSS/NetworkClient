@@ -12,6 +12,7 @@ import com.hc.network.client.view.component.TextRow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
@@ -77,8 +78,7 @@ public class ChatView extends JFrame{
                                 row = new ImageRow(user.getHeadNum(), model.getName(), image);
                             }
                             row.setPreferredSize(new Dimension(Collector.chatViewWidth, row.componentHeight()));
-                            outPutTextPane.insertComponent(row);
-                            outPutTextPane.setCaretPosition(++count);
+                            insertInOutputPane(row);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -228,7 +228,16 @@ public class ChatView extends JFrame{
         pictureButton.setOpaque(false);
         pictureButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         pictureButton.addActionListener(evt -> {
-
+            FileDialog fileDialog = new FileDialog(this, "图片选择", FileDialog.LOAD);
+            fileDialog.setFile("*.jpg;*.png;");
+            fileDialog.setVisible(true);
+            fileDialog.setVisible(false);
+            if (fileDialog.getFile() != null) {
+                ImageIcon image = new ImageIcon(fileDialog.getDirectory()+fileDialog.getFile());
+                ImageRow row = new ImageRow(Collector.userHeadNum, Collector.name, image);
+                row.setPreferredSize(new Dimension(Collector.chatViewWidth, row.componentHeight()));
+                insertInOutputPane(row);
+            }
         });
         handleToolbar.add(pictureButton);
     }
@@ -297,5 +306,9 @@ public class ChatView extends JFrame{
         outPutTextPane.setMaximumSize(new java.awt.Dimension(Collector.chatViewWidth, 280));
         outPutTextPane.setMinimumSize(new java.awt.Dimension(Collector.chatViewWidth, 280));
         outPutScrollPane.setViewportView(outPutTextPane);
+    }
+    public void insertInOutputPane(Row row) {
+        outPutTextPane.insertComponent(row);
+        outPutTextPane.setCaretPosition(++count);
     }
 }

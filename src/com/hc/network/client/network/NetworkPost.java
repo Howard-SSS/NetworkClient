@@ -8,6 +8,7 @@ import com.hc.network.client.model.content.TextModel;
 import com.hc.network.client.util.Collector;
 import com.hc.network.client.util.Translate;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
