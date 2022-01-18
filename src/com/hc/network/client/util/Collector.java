@@ -32,6 +32,8 @@ public class Collector {
     }
     public static Font nameFont = new Font("黑体", Font.PLAIN, 12);
     public static Font textFont = new Font("黑体", Font.PLAIN, 18);
+    public static Color nameColor = Color.darkGray;
+    public static Color textColor = Color.black;
     public static User getCustomUser() {
         return new User(userId, name, userHeadNum);
     }

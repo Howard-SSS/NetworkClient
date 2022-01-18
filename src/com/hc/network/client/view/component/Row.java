@@ -9,5 +9,11 @@ public class Row extends JComponent {
         this.headNum = headNum;
         this.name = name;
     }
+    public int componentHeight() {
+        return 0;
+    }
+    public int componentWidth() {
+        return 0;
+    }
 }
 

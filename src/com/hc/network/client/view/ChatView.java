@@ -25,7 +25,6 @@ public class ChatView extends JFrame{
 
     private JButton pictureButton;
     private JButton sendButton;
-    private JButton uploadButton;
     private javax.swing.JList<User> userList;
     private JMenuBar menuBar;
     private JMenu editMenu;
@@ -60,11 +59,6 @@ public class ChatView extends JFrame{
                             if (object instanceof TextModel) {
                                 TextModel model = (TextModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
-                                row.setPreferredSize(
-                                        new Dimension(
-                                                 Collector.chatViewWidth, ((TextRow)row).calculateHeight(model.getText())
-                                        )
-                                );
                             } else if (object instanceof LoginModel) {
                                 LoginModel model = (LoginModel) object;
                                 row = new TextRow(user.getHeadNum(), model.getName(), model.getText());
@@ -82,6 +76,7 @@ public class ChatView extends JFrame{
                                     continue;
                                 row = new ImageRow(user.getHeadNum(), model.getName(), image);
                             }
+                            row.setPreferredSize(new Dimension(Collector.chatViewWidth, row.componentHeight()));
                             outPutTextPane.insertComponent(row);
                             outPutTextPane.setCaretPosition(++count);
                         } catch (IOException e) {
@@ -137,7 +132,6 @@ public class ChatView extends JFrame{
         pictureButton = new JButton();
         outPutScrollPane = new JScrollPane();
         outPutTextPane = new JTextPane();
-        uploadButton = new JButton();
         menuBar = new JMenuBar();
         fileMenu = new JMenu();
         editMenu = new JMenu();
@@ -234,18 +228,9 @@ public class ChatView extends JFrame{
         pictureButton.setOpaque(false);
         pictureButton.setVerticalTextPosition(SwingConstants.BOTTOM);
         pictureButton.addActionListener(evt -> {
-            // 新建界面
-        });
-        uploadButton.setIcon(new ImageIcon("resource/tool/upload.png"));
-        uploadButton.setFocusable(false);
-        uploadButton.setHorizontalTextPosition(SwingConstants.CENTER);
-        uploadButton.setOpaque(false);
-        uploadButton.setVerticalTextPosition(SwingConstants.BOTTOM);
-        uploadButton.addActionListener(evt -> {
-            // 新建界面
+
         });
         handleToolbar.add(pictureButton);
-        handleToolbar.add(uploadButton);
     }
     private void initSendButton() {
         sendButton.setText("发送");

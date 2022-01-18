@@ -18,7 +18,7 @@ public class TextRow extends Row {
     public TextRow(String text) {
         this(Collector.defaultName, text);
     }
-    private int[] textCalculate(String text) {
+    private int[] textCalculate() {
         int maxWidth = Collector.chatViewWidth - 5 - 45 - 5 - 2 * 3;
         FontMetrics fm = FontDesignMetrics.getMetrics(Collector.textFont);
         int textHeight = fm.getHeight();
@@ -27,10 +27,15 @@ public class TextRow extends Row {
         int rows = (int)Math.ceil((double)textWidth / cols) * textHeight;
         return new int[]{rows, cols};
     }
-    public int calculateHeight(String text) {
+    @Override
+    public int componentHeight() {
         FontMetrics fm = FontDesignMetrics.getMetrics(Collector.nameFont);
         int nameHeight = fm.getHeight();
-        return textCalculate(text)[0] + 2 * 3 + nameHeight;
+        return textCalculate()[0] + 2 * 3 + nameHeight + 5;
+    }
+    @Override
+    public int componentWidth() {
+        return textCalculate()[1] + 5 + 45 + 5 + 2 * 3;
     }
     @Override
     protected void paintComponent(Graphics g){
@@ -38,16 +43,16 @@ public class TextRow extends Row {
         g.setColor(Color.black);
         g.setFont(Collector.nameFont);
         int nameHeight = g.getFontMetrics().getHeight();
-        g.setColor(Color.gray);
+        g.setColor(Collector.nameColor);
         g.drawString(name, 5 + 45 + 5, nameHeight);
 
-        int[] res = textCalculate(text);
+        int[] res = textCalculate();
         int cols = res[1];
         int rows = res[0];
         g.setColor(Color.green);
         g.fillRoundRect( 55, 3 + nameHeight, cols + 6, rows + 6, 2, 2);// 3 rect 3
 
-        g.setColor(Color.black);
+        g.setColor(Collector.textColor);
         g.setFont(Collector.textFont);
         int textHeight = g.getFontMetrics().getHeight();
         g.drawString(text, 55 + 3, 3 + nameHeight+textHeight);// 3 str 3
